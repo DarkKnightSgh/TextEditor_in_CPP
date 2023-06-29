@@ -207,26 +207,33 @@ void text_editor::display()
     inputFile.close();
     std::cout << "" << std::endl;
 }
-void text_editor::save() //call open function before this to ensure correct name is taken
+void text_editor::save()
 {
-    std::ofstream outputFile(name);//Current File Name is read
-    if(!outputFile)
+    std::cout << "Enter file name: ";
+    std::cin >> name;
+
+    std::ofstream outputFile(name);
+
+    if (!outputFile)
     {
-        std::cerr<<"Error in opening File :"<<std::endl;
+        std::cerr << "Error in opening file" << std::endl;
         return;
     }
+
     std::string text;
+    std::cin.ignore(); // Ignore the newline character from previous input
+
     while (std::getline(std::cin, text))
     {
-        if (text == ":wq")  // Exit condition, use ":wq" to save and exit
+        if (text == ":wq") // Exit condition, use ":wq" to save and exit
         {
             break;
         }
-        outputFile << text << std::endl;      
+        outputFile << text << std::endl;
     }
+
     outputFile.close();
     std::cout << "File saved successfully." << std::endl;
-    
 }
 void text_editor::search()
 {
@@ -392,9 +399,9 @@ int main()
         case 2:
             t.open();
             break;
-            /* case 3:
+            case 3:
                  t.insert_text();
-                 break;*/
+                 break;
         case 4:
             t.delete_text();
             break;
@@ -410,9 +417,9 @@ int main()
         case 8:
             t.search_replace();
             break;
-        /*case 9:
+        case 9:
             t.save();
-            break;*/
+            break;
         case 0:
             exit(0);
         }
