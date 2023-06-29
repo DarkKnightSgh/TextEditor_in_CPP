@@ -87,35 +87,85 @@ void text_editor::insert_text()
 
     std::cout << "Text inserted successfully." << std::endl;
 }
-void text_editor::delete_text()
-{
+// void text_editor::delete_text()
+// {
 
+//     std::string fn;
+//     std::cout << "Enter file name: ";
+//     std::cin >> fn;
+//     std::ifstream inputFile(fn);
+
+//     if (!inputFile.is_open())
+//     {
+//         std::cerr << "Failed to open the file: " << fn << std::endl;
+//         return;
+//     }
+
+//     std::string line;
+//     std::cout << "Enter line to delete";
+//     std::cin >> line;
+//     while (std::getline(inputFile, line))
+//     {
+//         // std::cout << line << std::endl;
+//         int curpos = line.length();
+//         for (int i = 0; i < curpos; i++)
+//         {
+//             std::cout << "\b \b";
+//         }
+//     }
+
+//     inputFile.close();
+// }
+
+  void text_editor::delete_text()
+{
     std::string fn;
     std::cout << "Enter file name: ";
     std::cin >> fn;
-    std::ifstream inputFile(fn);
 
+    std::ifstream inputFile(fn);
     if (!inputFile.is_open())
     {
         std::cerr << "Failed to open the file: " << fn << std::endl;
         return;
     }
 
+    std::vector<std::string> lines;
+    std::string lineToDelete;
+    std::cout << "Enter line to delete: ";
+    std::cin.ignore(); // Ignore the newline character from previous input
+    std::getline(std::cin, lineToDelete);
+
     std::string line;
-    std::cout << "Enter line to delete";
-    std::cin >> line;
     while (std::getline(inputFile, line))
     {
-        // std::cout << line << std::endl;
-        int curpos = line.length();
-        for (int i = 0; i < curpos; i++)
+        if (line != lineToDelete)
         {
-            std::cout << "\b \b";
+            lines.push_back(line);
         }
     }
 
     inputFile.close();
+
+    std::ofstream outputFile(fn);
+    if (!outputFile.is_open())
+    {
+        std::cerr << "Failed to open the file: " << fn << std::endl;
+        return;
+    }
+
+    for (const auto& line : lines)
+    {
+        outputFile << line << std::endl;
+    }
+
+    outputFile.close();
+
+    std::cout << "Line deleted successfully." << std::endl;
 }
+
+
+
 void text_editor::move_cursor()
 {
     std::string name;
@@ -219,6 +269,7 @@ void text_editor::save()
         std::cerr << "Error in opening file" << std::endl;
         return;
     }
+    std::cout<<"Enter the text you want to save in the file and to stop and save enter <:wq>"<<std::endl;
 
     std::string text;
     std::cin.ignore(); // Ignore the newline character from previous input
