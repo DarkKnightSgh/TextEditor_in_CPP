@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -20,10 +21,6 @@ public:
     void search_replace();
     void save();
 };
-
-void insert_text();
- void move_cursor();
-  void display();
 
 void text_editor::create()
 {
@@ -66,24 +63,172 @@ void text_editor::open()
 
     inputFile.close();
 }
+void text_editor::insert_text()
+{
+    std::string name;
+    std::cout << "Enter the name of the file to insert text: ";
+    std::cin >> name;
 
-/*void text_editor insert_text(){
+    std::ofstream outputFile(name, std::ios::app);
 
+    if (!outputFile.is_open())
+    {
+        std::cerr << "Failed to open the file: " << name << std::endl;
+        return;
+    }
+
+    std::string text;
+    std::cout << "Enter text to insert: ";
+    std::cin.ignore(); // Ignore the newline character from previous input
+    std::getline(std::cin, text);
+
+    outputFile << text << std::endl;
+
+    outputFile.close();
+
+    std::cout << "Text inserted successfully." << std::endl;
 }
-void text_editor delete_text(){
+void text_editor::delete_text()
+{
 
+    std::string fn;
+    std::cout << "Enter file name: ";
+    std::cin >> fn;
+    std::ifstream inputFile(fn);
+
+    if (!inputFile.is_open())
+    {
+        std::cerr << "Failed to open the file: " << fn << std::endl;
+        return;
+    }
+
+    std::string line;
+    std::cout << "Enter line to delete";
+    std::cin >> line;
+    while (std::getline(inputFile, line))
+    {
+        // std::cout << line << std::endl;
+        int curpos = line.length();
+        for (int i = 0; i < curpos; i++)
+        {
+            std::cout << "\b \b";
+        }
+    }
+
+    inputFile.close();
 }
-void text_editor move_cursor(){
+void text_editor::move_cursor()
+{
+    std::string name;
+    std::cout << "Enter the name of the file to open: ";
+    std::cin >> name;
 
+    std::fstream fs(name);
+
+    if (!fs.is_open())
+    {
+        std::cerr << "Failed to open the file: " << name << std::endl;
+        return;
+    }
+
+    else
+    {
+        int opt;
+        int pos;
+        char c;
+
+        std::cout << "1 : read" << std::endl;
+        std::cout << "2 : write" << std::endl;
+
+        /* int count = 0;
+         char ch;
+        while (fs.get(ch)) {
+            count++;
+        }
+
+
+   std::cout << "The file contains " << count << " characters." << std::endl;*/
+
+        std::cout << "Enter option:" << std::endl;
+        std::cin >> opt;
+        if (opt == 1)
+        {
+
+            std::cout << "Enter position: ";
+            std::cin >> pos;
+            fs.seekg(pos, std::ios::cur);
+            while (!fs.eof())
+            {
+                fs.get(c);
+                std::cout << c;
+            }
+            std::cout << "" << std::endl;
+        }
+
+        else if (opt == 2)
+        {
+            std::string text;
+            std::cout << "Enter position: ";
+            std::cin >> pos;
+            fs.seekp(pos, std::ios::beg);
+            std::cout << "Enter text to insert: ";
+            std::cin >> text;
+            fs << text;
+        }
+
+        else
+        {
+            std::cout << "Invalid" << std::endl;
+        }
+    }
+    fs.close();
 }
-void text_editor display(){
 
+void text_editor::display()
+{
+    std::string name;
+    std::cout << "Enter the name of the file to display: ";
+    std::cin >> name;
+
+    std::ifstream inputFile(name);
+
+    if (!inputFile.is_open())
+    {
+        std::cerr << "Failed to open the file: " << name << std::endl;
+        return;
+    }
+    char ch;
+
+    while (!inputFile.eof())
+    {
+        inputFile.get(ch);
+        std::cout << ch;
+    }
+
+    inputFile.close();
+    std::cout << "" << std::endl;
 }
-
-void text_editor save(){
-
-}*/
-
+void text_editor::save() //call open function before this to ensure correct name is taken
+{
+    std::ofstream outputFile(name);//Current File Name is read
+    if(!outputFile)
+    {
+        std::cerr<<"Error in opening File :"<<std::endl;
+        return;
+    }
+    std::string text;
+    while (std::getline(std::cin, text))
+    {
+        if (text == ":wq")  // Exit condition, use ":wq" to save and exit
+        {
+            break;
+        }
+        outputFile << text << std::endl;      
+    }
+    outputFile.close();
+    std::cout << "File saved successfully." << std::endl;
+    
+}
 void text_editor::search()
 {
     std::string name;
@@ -189,12 +334,12 @@ void text_editor::search_replace()
         std::ifstream inputFile(name);
         /*std::string Contents((std::istreambuf_iterator<char>(inputFile)), std::istreambuf_iterator<char>());*/
         inputFile.open(name.c_str(), std::ios::in | std::ios::out | std::ios::binary);
-        //The c_str() function in C++ converts a string to an array of characters and terminates this array with a null character at the end
+        // The c_str() function in C++ converts a string to an array of characters and terminates this array with a null character at the end
 
-        std::stringstream text; 
-         
+        std::stringstream text;
+
         text << inputFile.rdbuf();
-        std::string Contents = text.str();//the content of file is present in text.str()
+        std::string Contents = text.str(); // the content of file is present in text.str()
 
         inputFile.close();
 
@@ -212,38 +357,14 @@ void text_editor::search_replace()
         std::cout << "Word replaced successfully in the file." << std::endl;
     }
 }
-void text_editor::save() //call open function before this to ensure correct name is taken
-{
-    std::ofstream outputFile(name);//Current File Name is read
-    if(!outputFile)
-    {
-        std::cerr<<"Error in opening File :"<<std::endl;
-        return;
-    }
-    std::string text;
-    while (std::getline(std::cin, text))
-    {
-        if (text == ":wq")  // Exit condition, use ":wq" to save and exit
-        {
-            break;
-        }
-        outputFile << text << std::endl;      
-    }
-     outputFile.close();
-      std::cout << "File saved successfully." << std::endl;
-
-    }
-   
-
-
 
 void menu()
 {
     std::cout << "1: Create a File" << std::endl;
     std::cout << "2: Open a File" << std::endl;
     std::cout << "3: Insert text to a File" << std::endl;
-    std::cout << "5: Delete from a File" << std::endl;
-    std::cout << "5: Move cursor a File" << std::endl;
+    std::cout << "4: Delete from a File" << std::endl;
+    std::cout << "5: Move cursor " << std::endl;
     std::cout << "6: Display a File" << std::endl;
     std::cout << "7: Search " << std::endl;
     std::cout << "8: Search and replace" << std::endl;
@@ -256,7 +377,11 @@ int main()
     int choice;
 
     while (1)
+
     {
+        std::cout << "" << std::endl;
+        std::cout << "" << std::endl;
+        std::cout << "------------------------------" << std::endl;
         std::cout << "Enter your choice: ";
         std::cin >> choice;
         switch (choice)
@@ -268,9 +393,9 @@ int main()
         case 2:
             t.open();
             break;
-        case 3:
-            t.insert_text();
-            break;
+            /* case 3:
+                 t.insert_text();
+                 break;*/
         case 4:
             t.delete_text();
             break;
@@ -286,9 +411,9 @@ int main()
         case 8:
             t.search_replace();
             break;
-        case 9:
+        /*case 9:
             t.save();
-            break;
+            break;*/
         case 0:
             exit(0);
         }
