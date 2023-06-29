@@ -1,0 +1,19 @@
+First Clone the Repository to Local Machines :
+git clone https://github.com/DarkKnightSgh/TextEditor_in_CPP.git
+
+To initialize the folder to be git enabled:
+git init 
+
+Basically to allow to commit,push and pull changes:
+git remote add origin https://github.com/DarkKnightSgh/TextEditor_in_CPP.git
+
+Enter the actual Folder in which the file is:
+cd TextEditor_in_CPP 
+
+git status
+
+git add <file>
+
+git commit -m <text>
+
+git push
