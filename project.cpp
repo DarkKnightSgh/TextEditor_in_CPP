@@ -21,7 +21,9 @@ public:
     void save();
 };
 
-
+void insert_text();
+ void move_cursor();
+  void display();
 
 void text_editor::create()
 {
