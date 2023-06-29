@@ -16,4 +16,8 @@ git add <file>
 
 git commit -m <text>
 
+To push changes:
 git push
+
+To pull the changes made:
+git pull
